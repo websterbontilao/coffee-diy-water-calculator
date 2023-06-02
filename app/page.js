@@ -1,7 +1,10 @@
-import NumberInput from "./components/fields/Number";
+import Calculator from "./components/Calculator";
 
 export default function Home() {
   return (
-    <NumberInput label="TDS" />
+    <>
+      <Calculator />
+    </>
+    
   );
 }
