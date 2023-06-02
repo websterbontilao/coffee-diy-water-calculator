@@ -2,13 +2,14 @@
 import { useState } from "react";
 import NumberInput from "./fields/Number";
 
-let calculatorValues = {
-    "gh": 0.0,
-    "kh": 0.0,
-    "tds": 0.0
-};
 
-function Number({label, value}) {
+function Number({label, value, onChange}) {
+
+    const handleChange = (e) => {
+        if (onChange) {
+            onChange(e.target.value);
+        }
+    };
 
     return (
         <>
@@ -22,37 +23,40 @@ function Number({label, value}) {
 
 export default function Calculator() {
 
-    const [values, setValues] = useState(calculatorValues);
+    const [ghValue, setGhValue] = useState(0);
+    const [khValue, setKhValue] = useState(0);
+    const [tdsValue, setTdsValue] = useState(0);
 
     function handleGHChange(e) {
 
-        const newValues = [...values];
-        newValues.gh = e.target.value;
+        const newValue = e.target.value;
 
-        let tds = calculateTDS(newValues.gh, newValues.kh);
+        setGhValue(newValue);
 
-        newValues.tds = tds;
-
-        setValues(newValues);
+        updateTdsValue();
     }
 
     function handleKHChange(e) {
 
-        const newValues = [...values];
-        newValues.kh = e.target.value;
+        const newValue = e.target.value;
 
-        let tds = calculateTDS(newValues.gh, newValues.kh);
+        setKhValue(newValue);
 
-        newValues.tds = tds;
+        updateTdsValue();
+    }
 
-        setValues(newValues);
+    function updateTdsValue() {
+
+        let tds = calculateTDS(ghValue, khValue);
+
+        setTdsValue(tds);
     }
 
     return (
         <div>
-            <Number label="GH" value={values.gh} onChange={handleGHChange} />
-            <Number label="KH" value={values.kh} onChange={handleKHChange} />
-            <Number label="TDS" value={values.tds} />
+            <Number label="GH" value={ghValue} onChange={handleGHChange} />
+            <Number label="KH" value={khValue} onChange={handleKHChange} />
+            <Number label="TDS" value={tdsValue} />
         </div>
     );
 }
@@ -61,7 +65,7 @@ function calculateTDS(gh, kh, start_gh = 0, start_kh = 0) {
 
     let tds = 0.0;
 
-    tds = calculateGH(gh && 0, start_gh) + calculateKH(kh && 0, start_kh);
+    tds = calculateGH(gh, start_gh) + calculateKH(kh, start_kh);
 
     return tds > 0 ? tds : 0;
 }
