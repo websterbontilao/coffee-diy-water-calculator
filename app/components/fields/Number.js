@@ -1,18 +1,17 @@
 "use client";
 import { useState } from "react";
 
-function NumberField({regex}) {
+export default function NumberInput({defaultValue, regex}) {
 
-    const [value, setValue] = useState(0);
-    regex = regex ? regex : /^$|^-?\d+(.\d+)?$/;
+    const [value, setValue] = useState(defaultValue);
 
     function handleInputChange(regex, event) {
 
         let inputValue = event.target.value;
+        regex = regex ? regex : /^\d{1,}(\.\d{0,2})?$/;
 
-        if (regex.test(inputValue)) {
+        if (!inputValue || regex.test(inputValue)) {
 
-            inputValue = inputValue !== '-' && +inputValue;
             setValue(inputValue);
         }
     }
@@ -20,10 +19,4 @@ function NumberField({regex}) {
     return (
         <input type="text" value={value} onChange={(event) => handleInputChange(regex, event)} />
     );
-}
-
-
-export default function NumberInput() {
-
-    return <NumberField />;
 }
