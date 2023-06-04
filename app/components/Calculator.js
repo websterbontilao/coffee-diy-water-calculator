@@ -1,21 +1,20 @@
 "use client";
 import { useState } from "react";
-import NumberInput from "./fields/Number";
+import { calculateTDS, calculateGH, calculateKH } from "./TDSCalculator";
 
 
-function Number({label, value, onChange}) {
-
-    const handleChange = (e) => {
-        if (onChange) {
-            onChange(e.target.value);
-        }
-    };
+function Number({label, value, onChange, disabled}) {
 
     return (
         <>
             <label>
                 <span>{label}</span>
-                <NumberInput defaultValue={value} />
+                <input 
+                    type="text"
+                    value={value}
+                    onChange={onChange}
+                    disabled={disabled}
+                />
             </label>
         </>
     );
@@ -27,27 +26,43 @@ export default function Calculator() {
     const [khValue, setKhValue] = useState(0);
     const [tdsValue, setTdsValue] = useState(0);
 
+    const [ghResult, setGhResult] = useState(0);
+    const [khResult, setKhResult] = useState(0);
+
+
     function handleGHChange(e) {
 
         const newValue = e.target.value;
 
-        setGhValue(newValue);
+        if (isValidNumber(newValue)) {
 
-        updateTdsValue();
+            setGhValue(newValue);
+
+            let newGhResult = calculateGH(ghValue, 1000);
+            setGhResult(newGhResult);
+
+            updateTdsValue();
+        }
     }
 
     function handleKHChange(e) {
 
         const newValue = e.target.value;
 
-        setKhValue(newValue);
+        if (isValidNumber(newValue)) {
 
-        updateTdsValue();
+            setKhValue(newValue);
+
+            let newKhResult = calculateKH(khValue, 1000);
+            setKhResult(newKhResult);
+
+            updateTdsValue();
+        }
     }
 
     function updateTdsValue() {
 
-        let tds = calculateTDS(ghValue, khValue);
+        let tds = calculateTDS(ghResult, khResult);
 
         setTdsValue(tds);
     }
@@ -56,26 +71,18 @@ export default function Calculator() {
         <div>
             <Number label="GH" value={ghValue} onChange={handleGHChange} />
             <Number label="KH" value={khValue} onChange={handleKHChange} />
+            <br />
+            <Number label="Resulting GH" value={ghResult} disabled={true} />
+            <Number label="Resulting KH" value={khResult} disabled={true} />
             <Number label="TDS" value={tdsValue} />
         </div>
     );
 }
 
-function calculateTDS(gh, kh, start_gh = 0, start_kh = 0) {
 
-    let tds = 0.0;
+function isValidNumber(value, regex) {
 
-    tds = calculateGH(gh, start_gh) + calculateKH(kh, start_kh);
+    regex = regex ? regex : /^\d{1,}(\.\d{0,2})?$/;
 
-    return tds > 0 ? tds : 0;
-}
-
-function calculateGH(gh, start_gh = 0) {
-
-    return start_gh + gh / 1000 * 1200;
-}
-
-function calculateKH(kh, start_kh = 0) {
-
-    return start_kh + kh / 1000 * 1680;
+    return !value || regex.test(value);
 }
