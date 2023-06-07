@@ -38,10 +38,12 @@ export default function Calculator() {
 
             setGhValue(newValue);
 
-            let newGhResult = calculateGH(ghValue, 1000);
+            const newGhResult = calculateGH(newValue, 1000);
             setGhResult(newGhResult);
 
-            updateTdsValue();
+            const tds = calculateTDS(newValue, newGhResult);
+
+            setTdsValue(tds);
         }
     }
 
@@ -53,10 +55,12 @@ export default function Calculator() {
 
             setKhValue(newValue);
 
-            let newKhResult = calculateKH(khValue, 1000);
+            const newKhResult = calculateKH(newValue, 1000);
             setKhResult(newKhResult);
 
-            updateTdsValue();
+            const tds = calculateTDS(ghResult, newKhResult);
+
+            setTdsValue(tds);
         }
     }
 
