@@ -46,10 +46,20 @@ export default function Calculator() {
 
     return (
         <div className="flex flex-col flex-nowrap ml-5 mt-5">
-            <Number label="Initial GH" value={ghValue} onChange={handleGHChange} />
-            <Number label="Initial KH" value={khValue} onChange={handleKHChange} />
-            <Number label="GH" value={ghValue} onChange={handleGHChange} />
-            <Number label="KH" value={khValue} onChange={handleKHChange} />
+            <div className="flex flex-row">
+                <Number label="Initial GH" value={ghValue} onChange={handleGHChange} />
+                <span className="ml-1">
+                    <Number label="GH" value={ghValue} onChange={handleGHChange} />
+                </span>
+            </div>
+            <div className="flex flex-row">
+                <Number label="Initial KH" value={khValue} onChange={handleKHChange} />
+                <div className="ml-1 flex-none">
+                    <Number label="KH" value={khValue} onChange={handleKHChange} />
+                </div> 
+            </div>
+           
+            
             <br />
             <Number label="Resulting GH" value={ghResult} disabled={true} />
             <Number label="Resulting KH" value={khResult} disabled={true} />
