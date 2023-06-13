@@ -46,24 +46,28 @@ export default function Calculator() {
 
     return (
         <div className="flex flex-col flex-nowrap ml-5 mt-5">
+            <div className="w-1/5">
+             <Number label="Total Water (mL)" value={waterValue} onChange={handleWaterChange} />
+            </div>
             <div className="flex flex-row">
-                <Number label="Initial GH" value={ghValue} onChange={handleGHChange} />
+                <Number label="Initial GH (ppm)" value={initialGhValue} onChange={handleInitialGhChange} />
                 <span className="ml-1">
-                    <Number label="GH" value={ghValue} onChange={handleGHChange} />
+                    <Number label="GH (mL)" value={ghValue} onChange={handleGHChange} />
                 </span>
             </div>
             <div className="flex flex-row">
-                <Number label="Initial KH" value={khValue} onChange={handleKHChange} />
+                <Number label="Initial KH (ppm)" value={initialKhValue} onChange={handleInitialKhChange} />
                 <div className="ml-1 flex-none">
-                    <Number label="KH" value={khValue} onChange={handleKHChange} />
+                    <Number label="KH (mL)" value={khValue} onChange={handleKHChange} />
                 </div> 
             </div>
            
-            
             <br />
+            <div className="w-1/5">
             <Number label="Resulting GH" value={ghResult} disabled={true} />
             <Number label="Resulting KH" value={khResult} disabled={true} />
             <Number label="Resulting TDS" value={tdsValue} disabled={true} />
+            </div>
         </div>
     );
 }
