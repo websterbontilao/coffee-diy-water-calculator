@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { calculateTDS, calculateGH, calculateKH, calculateWater } from "./TDSCalculator";
 
 import Number from "./fields/NumberField";
@@ -11,74 +11,30 @@ export default function Calculator() {
     const [initialKhValue, setInitialKhValue] = useState('');
     const [ghValue, setGhValue] = useState('');
     const [khValue, setKhValue] = useState('');
-    const [tdsValue, setTdsValue] = useState(0);
 
-    const [ghResult, setGhResult] = useState(0);
-    const [khResult, setKhResult] = useState(0);
+    let ghResult = calculateGH(ghValue, waterValue, initialGhValue);
+    let khResult = calculateKH(khValue, waterValue, initialKhValue);
 
+    let tdsValue = calculateTDS(ghResult, khResult);
 
     function handleGHChange(e) {
 
         setGhValue(e.target.value);
-
-        const newValue = updateGhResults(e.target.value, initialGhValue);
-
-        updateTDSResults(newValue, khResult);
     }
 
     function handleInitialGhChange(e) {
 
         setInitialGhValue(e.target.value);
-
-        const newValue = updateGhResults(ghValue, e.target.value);
-
-        updateTDSResults(newValue, khResult);
-    }
-
-    function updateGhResults(gh, initialGh) {
-
-        const water = calculateWater(gh, khValue, waterValue);
-        const newGhResult = calculateGH(gh, water, initialGh);
-
-        setGhResult(newGhResult);
-
-        return newGhResult;
     }
 
     function handleKHChange(e) {
 
         setKhValue(e.target.value);
-
-        const newValue = updateKhResults(e.target.value, initialKhValue);
-
-        updateTDSResults(ghResult, newValue);
     }
 
     function handleInitialKhChange(e) {
 
         setInitialKhValue(e.target.value);
-
-        const newValue = updateKhResults(khValue, e.target.value);
-
-        updateTDSResults(ghResult, newValue);
-    }
-
-    function updateKhResults(kh, initialKh) {
-
-        const water = calculateWater(ghValue, kh, waterValue);
-        console.log(waterValue);
-        const newKhResult = calculateKH(kh, water, initialKh);
-
-        setKhResult(newKhResult);
-
-        return newKhResult;
-    }
-
-    function updateTDSResults(gh, kh) {
-
-        const tds = calculateTDS(gh, kh);
-
-        setTdsValue(tds);
     }
 
     function handleWaterChange(e) {
