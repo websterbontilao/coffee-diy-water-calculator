@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
-import { calculateTDS, calculateGH, calculateKH } from "./TDSCalculator";
+import { calculateTDS, calculateGH, calculateKH, calculateWater } from "./TDSCalculator";
 
 import Number from "./fields/NumberField";
 
 export default function Calculator() {
 
-    const [initialGhValue, setinitialGhValue] = useState('');
-    const [initialKhValue, setinitialKhValue] = useState('');
+    const [waterValue, setWaterValue] = useState(1000);
+    const [initialGhValue, setInitialGhValue] = useState('');
+    const [initialKhValue, setInitialKhValue] = useState('');
     const [ghValue, setGhValue] = useState('');
     const [khValue, setKhValue] = useState('');
     const [tdsValue, setTdsValue] = useState(0);
@@ -18,30 +19,71 @@ export default function Calculator() {
 
     function handleGHChange(e) {
 
-        const newValue = e.target.value;
+        setGhValue(e.target.value);
 
-        setGhValue(newValue);
+        const newValue = updateGhResults(e.target.value, initialGhValue);
 
-        const newGhResult = calculateGH(newValue, 1000);
+        updateTDSResults(newValue, khResult);
+    }
+
+    function handleInitialGhChange(e) {
+
+        setInitialGhValue(e.target.value);
+
+        const newValue = updateGhResults(ghValue, e.target.value);
+
+        updateTDSResults(newValue, khResult);
+    }
+
+    function updateGhResults(gh, initialGh) {
+
+        const water = calculateWater(gh, khValue, waterValue);
+        const newGhResult = calculateGH(gh, water, initialGh);
+
         setGhResult(newGhResult);
 
-        const tds = calculateTDS(newValue, khResult);
-
-        setTdsValue(tds);
+        return newGhResult;
     }
 
     function handleKHChange(e) {
 
-        const newValue = e.target.value;
+        setKhValue(e.target.value);
 
-        setKhValue(newValue);
+        const newValue = updateKhResults(e.target.value, initialKhValue);
 
-        const newKhResult = calculateKH(newValue, 1000);
+        updateTDSResults(ghResult, newValue);
+    }
+
+    function handleInitialKhChange(e) {
+
+        setInitialKhValue(e.target.value);
+
+        const newValue = updateKhResults(khValue, e.target.value);
+
+        updateTDSResults(ghResult, newValue);
+    }
+
+    function updateKhResults(kh, initialKh) {
+
+        const water = calculateWater(ghValue, kh, waterValue);
+        console.log(waterValue);
+        const newKhResult = calculateKH(kh, water, initialKh);
+
         setKhResult(newKhResult);
 
-        const tds = calculateTDS(ghResult, newKhResult);
+        return newKhResult;
+    }
+
+    function updateTDSResults(gh, kh) {
+
+        const tds = calculateTDS(gh, kh);
 
         setTdsValue(tds);
+    }
+
+    function handleWaterChange(e) {
+
+        setWaterValue(e.target.value);
     }
 
     return (
@@ -64,9 +106,9 @@ export default function Calculator() {
            
             <br />
             <div className="w-1/5">
-            <Number label="Resulting GH" value={ghResult} disabled={true} />
-            <Number label="Resulting KH" value={khResult} disabled={true} />
-            <Number label="Resulting TDS" value={tdsValue} disabled={true} />
+                <Number label="Resulting GH" value={ghResult} disabled={true} />
+                <Number label="Resulting KH" value={khResult} disabled={true} />
+                <Number label="Resulting TDS" value={tdsValue} disabled={true} />
             </div>
         </div>
     );

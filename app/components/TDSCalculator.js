@@ -24,3 +24,7 @@ export function calculateKH(kh, water, initial_kh = 0) {
     return Math.floor(ret) || 0;
 }
 
+export function calculateWater(gh, kh, total_volume = 1000) {
+
+    return total_volume - gh - kh;
+}
