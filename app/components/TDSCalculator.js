@@ -35,12 +35,13 @@ function calculateWater(gh, kh, total_volume = 1000) {
 
 export default function TDSCalculator() {
 
-    const [waterValue, setWaterValue] = useState(1000);
-    const [initialGhValue, setInitialGhValue] = useState('');
-    const [initialKhValue, setInitialKhValue] = useState('');
-    const [ghValue, setGhValue] = useState('');
-    const [khValue, setKhValue] = useState('');
-    const [selectedValue, setSelectedValue] = useState('');
+    const [totalVolume, setTotalVolume] = useState(1000);
+    const [waterResult, setWaterResult] = useState(1000);
+    const [initialGH, setInitialGH] = useState('');
+    const [initialKH, setInitialKH] = useState('');
+    const [gh, setGhValue] = useState('');
+    const [kh, setKH] = useState('');
+    const [selectedRecipe, setSelectedRecipe] = useState('');
     const [disableFields, setDisableFields] = useState(false);
 
     const [ghResult, setGhResult] = useState('');
@@ -54,32 +55,38 @@ export default function TDSCalculator() {
 
         setDisableFields(value.toLowerCase() !== "custom")
 
-        setSelectedValue(value);
+        setSelectedRecipe(value);
 
         setGhValue(waterRecipes[value]?.gh);
-        setKhValue(waterRecipes[value]?.kh);
+        setKH(waterRecipes[value]?.kh);
     }
 
     useEffect(() => {
 
-        const waterResult = calculateWater(ghValue, khValue);
-        const newGhResult = calculateGH(ghValue, waterResult, initialGhValue, waterValue);
+        const calculatedWaterResult = calculateWater(gh, kh, totalVolume);
+
+        setWaterResult(calculatedWaterResult);
+        
+    }, [gh, kh, totalVolume]);
+
+    useEffect(() => {
+
+        const newGhResult = calculateGH(gh, waterResult, initialGH, totalVolume);
 
         setGhResult(newGhResult);
 
-    }, [ghValue, initialGhValue, waterValue]);
+    }, [gh, initialGH, totalVolume]);
 
     useEffect(() => {
 
-        const waterResult = calculateWater(ghValue, khValue);
-        const newKhResult = calculateKH(khValue, waterResult, initialKhValue, waterValue);
+        const newKhResult = calculateKH(kh, waterResult, initialKH, totalVolume);
         setKhResult(newKhResult);
 
-    }, [khValue, initialKhValue, waterValue]);
+    }, [kh, initialKH, totalVolume]);
 
     useEffect(() => {
 
-        let tdsValue = calculateTDS(ghResult, khResult);
+        const tdsValue = calculateTDS(ghResult, khResult);
         setTdsResult(tdsValue);
 
     }, [ghResult, khResult]);
@@ -90,27 +97,35 @@ export default function TDSCalculator() {
                 <DropDownField
                     label="Recipe"
                     items={items} 
-                    value={selectedValue} 
+                    value={selectedRecipe} 
                     onChange={(e) => onRecipeChange(e.target.value) } 
                 />
             </div>
             <div className="flex flex-row">
                 <Number 
-                    label="Total Water (mL)" 
-                    value={waterValue} 
-                    onChange={(e) => { setWaterValue(e.target.value) }} 
+                    label="Expected Total Volume (mL)" 
+                    value={totalVolume} 
+                    onChange={(e) => { setTotalVolume(e.target.value) }} 
                 />
+                <div className="ml-1 flex-none">
+                    <Number 
+                        label="Deionised Water"
+                        value={waterResult}
+                        onChange={(e) => { setWaterResult(e.target.value) }}
+                        disabled={true}
+                    />
+                </div>
             </div>
             <div className="flex flex-row">
                 <Number 
                     label="Initial GH (ppm)"
-                    value={initialGhValue}
-                    onChange={(e) => { setInitialGhValue(e.target.value) }}
+                    value={initialGH}
+                    onChange={(e) => { setInitialGH(e.target.value) }}
                 />
                 <div className="ml-1 flex-none">
                     <Number 
                         label="GH (mL)"
-                        value={ghValue}
+                        value={gh}
                         onChange={(e) => { setGhValue(e.target.value) }} 
                         disabled={disableFields}
                     />
@@ -119,19 +134,19 @@ export default function TDSCalculator() {
             <div className="flex flex-row">
                 <Number 
                     label="Initial KH (ppm)"
-                    value={initialKhValue}
-                    onChange={(e) => { setInitialKhValue(e.target.value) }} 
+                    value={initialKH}
+                    onChange={(e) => { setInitialKH(e.target.value) }} 
                 />
                 <div className="ml-1 flex-none">
                     <Number 
                         label="KH (mL)"
-                        value={khValue}
-                        onChange={(e) => { setKhValue(e.target.value) }}
+                        value={kh}
+                        onChange={(e) => { setKH(e.target.value) }}
                         disabled={disableFields}
                     />
                 </div>
             </div>
-            <div className="w-1/5 mt-5">
+            <div className="flex flex-col mt-5">
                 <Number label="Resulting GH" value={ghResult} disabled={true} />
                 <Number label="Resulting KH" value={khResult} disabled={true} />
                 <Number label="Resulting TDS" value={tdsResult} disabled={true} />
