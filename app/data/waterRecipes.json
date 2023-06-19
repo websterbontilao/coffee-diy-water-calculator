@@ -1,0 +1,37 @@
+{
+    "Custom": {
+        "gh": 0,
+        "kh": 0,
+        "water": 1000
+    },
+    "Melbourne": {
+        "gh": 11.50,
+        "kh": 23.70,
+        "water": 1000
+    },
+    "World of Coffee - Budapest": {
+        "gh": 40.10,
+        "kh": 51.20,
+        "water": 1000
+    },
+    "Specialty Coffee Association": {
+        "gh": 40.10,
+        "kh": 68.60,
+        "water": 1000
+    },
+    "Barista Hustler Water Recipe": {
+        "gh": 40.10,
+        "kh": 80.70,
+        "water": 1000
+    },
+    "Rao Water": {
+        "gh": 50.10,
+        "kh": 75.70,
+        "water": 1000
+    },
+    "Hendon Water": {
+        "gh": 30.80,
+        "kh": 99.90,
+        "water": 1000
+    }
+}
