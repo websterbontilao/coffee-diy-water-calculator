@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Number from "./fields/NumberField";
+import DropDownField from "./fields/DropDownField";
 
 function calculateTDS (
     gh,
@@ -39,10 +40,25 @@ export default function TDSCalculator() {
     const [initialKhValue, setInitialKhValue] = useState('');
     const [ghValue, setGhValue] = useState('');
     const [khValue, setKhValue] = useState('');
+    const [selectedValue, setSelectedValue] = useState('');
+    const [disableFields, setDisableFields] = useState(false);
 
     const [ghResult, setGhResult] = useState('');
     const [khResult, setKhResult] = useState('');
     const [tdsResult, setTdsResult] = useState('');
+
+    const waterRecipes = require('../data/waterRecipes.json');
+    const items = Object.keys(waterRecipes);
+
+    const onRecipeChange = (value) => {
+
+        setDisableFields(value.toLowerCase() !== "custom")
+
+        setSelectedValue(value);
+
+        setGhValue(waterRecipes[value]?.gh);
+        setKhValue(waterRecipes[value]?.kh);
+    }
 
     useEffect(() => {
 
@@ -70,19 +86,49 @@ export default function TDSCalculator() {
 
     return (
         <div className="flex flex-col flex-nowrap ml-5 mt-5">
-            <div className="w-1/2">
-                <Number label="Total Water (mL)" value={waterValue} onChange={(e) => { setWaterValue(e.target.value) }} />
+            <div className="flex flex-row">
+                <DropDownField
+                    label="Recipe"
+                    items={items} 
+                    value={selectedValue} 
+                    onChange={(e) => onRecipeChange(e.target.value) } 
+                />
             </div>
             <div className="flex flex-row">
-                <Number label="Initial GH (ppm)" value={initialGhValue} onChange={(e) => { setInitialGhValue(e.target.value) }} />
+                <Number 
+                    label="Total Water (mL)" 
+                    value={waterValue} 
+                    onChange={(e) => { setWaterValue(e.target.value) }} 
+                />
+            </div>
+            <div className="flex flex-row">
+                <Number 
+                    label="Initial GH (ppm)"
+                    value={initialGhValue}
+                    onChange={(e) => { setInitialGhValue(e.target.value) }}
+                />
                 <div className="ml-1 flex-none">
-                    <Number label="GH (mL)" value={ghValue} onChange={(e) => { setGhValue(e.target.value) }} />
+                    <Number 
+                        label="GH (mL)"
+                        value={ghValue}
+                        onChange={(e) => { setGhValue(e.target.value) }} 
+                        disabled={disableFields}
+                    />
                 </div>
             </div>
             <div className="flex flex-row">
-                <Number label="Initial KH (ppm)" value={initialKhValue} onChange={(e) => { setInitialKhValue(e.target.value) }} />
+                <Number 
+                    label="Initial KH (ppm)"
+                    value={initialKhValue}
+                    onChange={(e) => { setInitialKhValue(e.target.value) }} 
+                />
                 <div className="ml-1 flex-none">
-                    <Number label="KH (mL)" value={khValue} onChange={(e) => { setKhValue(e.target.value) }} />
+                    <Number 
+                        label="KH (mL)"
+                        value={khValue}
+                        onChange={(e) => { setKhValue(e.target.value) }}
+                        disabled={disableFields}
+                    />
                 </div>
             </div>
             <div className="w-1/5 mt-5">
