@@ -15,7 +15,10 @@ export default function Number({label, value, onChange, disabled, regex}) {
         <div className="mt-2">
             <div className="relative">
                 <input
-                    className="rounded-1xl appearance-none border border-gray-300 rounded w-full min-w-0 md:min-w-xs py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="
+                        rounded-1xl appearance-none border border-gray-300
+                        rounded w-full min-w-0 md:min-w-xs py-2 px-3 text-gray-700 leading-tight 
+                        focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="text"
                     value={value}
                     onChange={(event) => handleNumberChange(event, onChange)}

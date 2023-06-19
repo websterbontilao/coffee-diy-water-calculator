@@ -4,11 +4,14 @@ const DropDownField = ({ label, items, value, onChange }) => {
 
     const handleOnchange = (e, onChange) => {
 
-        onChange(e);
+        if (onChange) {
+
+            onChange(e);
+        }
     }
 
     return (
-        <div className="relative mt-2">
+        <div className="relative mt-2 dropdown">
             <select 
                 name="recipes" 
                 className="
