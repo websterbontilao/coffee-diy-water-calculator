@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import './DropDownField.css';
 
 const DropDownField = ({ label, items, value, onChange }) => {
 
@@ -13,9 +14,9 @@ const DropDownField = ({ label, items, value, onChange }) => {
     return (
         <div className="relative mt-2 dropdown">
             <select 
-                name="recipes" 
+                name={label} 
                 className="
-                    rounded-1xl appearance-none border border-gray-300 
+                    minimal rounded-1xl appearance-none border border-gray-300 
                     rounded min-w-0 md:min-w-xs py-2 px-3 text-gray-700 leading-tight
                     focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={value}
